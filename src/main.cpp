@@ -259,7 +259,9 @@ int main(int argc, char* argv[])
                   "in an existing directory");
     auto pathChecker = [pathErr](const QString& pathValue) -> bool {
         QFileInfo fileInfo(pathValue);
-        if (fileInfo.isDir() || fileInfo.dir().exists()) {
+        if ((fileInfo.isDir() || fileInfo.dir().exists())
+            // mxp, 20211217, or file in existing directory
+            || (fileInfo.isFile() && fileInfo.dir().exists())) {
             return true;
         } else {
             SystemNotification().sendMessage(
